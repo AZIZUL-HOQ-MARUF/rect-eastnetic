@@ -1,12 +1,23 @@
 <div class="canvas-wrapper">
 
-  <svg class="main-canvas"#svg>
-    <rect
-     [attr.x]="currentShape.x"
-     [attr.y]="currentShape.y"
-     [attr.height]="currentShape.height" 
-     [attr.width]="currentShape.width">
-    </rect>
-  </svg>
+  <div class="d-flex">
+    <div class="main-canvas">
+      <svg #svg>
+        <rect
+          [attr.x]="currentShape.x"
+          [attr.y]="currentShape.y"
+          [attr.height]="currentShape.height" 
+          [attr.width]="currentShape.width">
+        </rect>
+        <rect #pointer id="resize" fill="red"
+         [attr.x]="pointerX" [attr.y]="pointerY"
+         [attr.width]="pointerWidth" [attr.height]="pointerHeight" />
+      </svg>
+    </div>
+    <div class="property">
+      <span>height: {{currentShape.height}}</span> <br>
+      <span>width: {{currentShape.width}}</span>
+    </div>
+  </div>
 
 </div>

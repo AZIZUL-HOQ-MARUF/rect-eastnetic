@@ -8,4 +8,8 @@ body {
     width: 80%;
     padding-top: 32px;
     margin: 0 auto;
+    @media (max-width: 600px) {
+        width: 90%;
+        padding-top: 16px;
+    }
 }

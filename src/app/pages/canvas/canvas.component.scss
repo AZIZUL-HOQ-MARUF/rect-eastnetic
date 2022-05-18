@@ -1,6 +1,7 @@
 .canvas-wrapper {
-    height: 300px;
+    height: 92vh;
     border: 1px gray solid;
+    background-color: rgb(250, 241, 231);
 }
 
 .main-canvas {
@@ -8,6 +9,29 @@
     height: 100%;
     rect {
         fill: white;
-        stroke: black;
+        stroke: aqua;
     }
+}
+
+.d-flex {
+    display: flex;
+    flex-wrap: nowrap;
+    height: inherit;
+    div:first-child {
+        width: 85%;
+        border-right: 1px rgb(40, 140, 170) solid;
+    }
+
+    div:last-child {
+        width: 15%;
+        padding: 0px 8px;
+        line-height: 24px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+}
+
+svg {
+    height: 99%;
+    width: 99%;
 }
