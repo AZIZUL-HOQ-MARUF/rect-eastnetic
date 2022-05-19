@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { finalize, fromEvent, of, repeat, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { ShapeService } from 'src/app/core/services/shape.service';
 import { Shape } from '../../models/shape.model';
@@ -7,17 +7,16 @@ import { Shape } from '../../models/shape.model';
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.scss']
 })
-export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CanvasComponent implements OnInit, OnDestroy {
 
   currentShape: Shape;
   pointerX: number = 115;
   pointerY: number = 115;
+  private baseValue = 100;
   readonly pointerHeight: number = 8;
   readonly pointerWidth: number = 8;
   private readonly minHeight: number = 5;
   private readonly minWidth: number = 5;
-  private maxWidth: number = 0;
-  private maxHeight: number = 0;
 
   @ViewChild('pointer', { static: true }) pointer!: ElementRef;
   @ViewChild('svg', { static: true }) svg!: ElementRef;
@@ -33,27 +32,21 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this._initiateDrawing();
   }
 
-  ngAfterViewInit(): void {
-    this.maxWidth = this.svg.nativeElement.clientWidth;
-    this.maxHeight = this.svg.nativeElement.clientHeight;
-
-  }
-
   private _getShape(): void {
     this._shapeService.getShape()
       .pipe(
         takeUntil(this.$unsubscribe)
       ).subscribe({
         next: (res) => {
-          this.currentShape.height = res.Height;
-          this.currentShape.width = res.Width;
+          this.currentShape.height = res.Height || this.baseValue;
+          this.currentShape.width = res.Width || this.baseValue;
           this.pointerX = this.currentShape.x + this.currentShape.width - (this.pointerWidth / 2);
           this.pointerY = this.currentShape.y + this.currentShape.height - (this.pointerHeight / 2);
 
         },
         error: () => {
-          this.currentShape.height = 100;
-          this.currentShape.width = 100;
+          this.currentShape.height = this.baseValue;
+          this.currentShape.width = this.baseValue;
           this.pointerX = this.currentShape.x + this.currentShape.width - (this.pointerWidth / 2);
           this.pointerY = this.currentShape.y + this.currentShape.height - (this.pointerHeight / 2);
         },
@@ -66,9 +59,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this._shapeService.saveShape({ Height: height, Width: width })
       .pipe(
         take(1)
-      ).subscribe(res => {
-        // this._getShape();
-      });
+      ).subscribe(res => {});
 
   }
 
@@ -122,8 +113,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.pointerX = evt.offsetX - this.pointerWidth / 2;
     }
-
-
 
   }
 
